@@ -5,8 +5,7 @@ import javax.validation.constraints.NotNull;
 import javax.persistence.*;
 
 @Entity
-@Table (name = "CLIENT")
-
+@Table(name = "client")
 public class Client {
     @Id
     @Column(name = "id")
@@ -15,9 +14,8 @@ public class Client {
 
 
     @NotNull
-    @Column(name = "client_name", nullable = false)
+    @Column(nullable = false)
     protected String clientname;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "default_billing")
