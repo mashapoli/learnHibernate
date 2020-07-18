@@ -39,7 +39,7 @@ public abstract class BillingDetails {
         this.owner = owner;
     }
 
-    public void pay(int amount) {
+    public void pay(int quantity) {
         // NOOP
     }
 }

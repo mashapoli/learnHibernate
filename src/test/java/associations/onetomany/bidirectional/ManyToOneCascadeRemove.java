@@ -8,7 +8,7 @@ import java.util.Collection;
 
 import static org.testng.Assert.assertEquals;
 
-public class ManyToOne {
+public class ManyToOneCascadeRemove {
 
 
     public static void main(String[] args) {
@@ -23,7 +23,7 @@ public class ManyToOne {
 
             Offer someOffer = new Offer(new BigDecimal("100.00"), someProduct);
             someProduct.getOffers().add(someOffer); // Don't forget!
-           // entityManager.persist(someOffer);
+            // entityManager.persist(someOffer);
 
             Offer secondOffer = new Offer(new BigDecimal("200.00"), someProduct);
             someProduct.getOffers().add(secondOffer);
@@ -38,14 +38,20 @@ public class ManyToOne {
             entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
 
+            Collection<Offer> offers =
+                    entityManager.createQuery("select o from Offer o where o.product.id = :productId")
+                            .setParameter("productId", PRODUCT_ID)
+                            .getResultList();
+            assertEquals(offers.size(), 2);
+
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+
 
             Product product = entityManager.find(Product.class, PRODUCT_ID);
-            assertEquals(product.getOffers().size(), 2);
-
-            //Каскадная передача состояния хранения
-            for  (Offer offer : product.getOffers()){
-                entityManager.remove(offer);
-            }
             entityManager.remove(product);
 
             entityManager.getTransaction().commit();
@@ -55,11 +61,11 @@ public class ManyToOne {
             entityManager.getTransaction().begin();
 
 
-            Collection<Offer> offers =
+            offers =
                     entityManager.createQuery("select o from Offer o where o.product.id = :productId")
                             .setParameter("productId", PRODUCT_ID)
                             .getResultList();
-            assertEquals(offers.size(), 2);
+            assertEquals(offers.size(), 0);
 
             entityManager.getTransaction().commit();
             entityManager.close();
