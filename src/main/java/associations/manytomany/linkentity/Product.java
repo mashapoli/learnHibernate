@@ -1,12 +1,11 @@
 package associations.manytomany.linkentity;
 
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Category {
+public class Product {
 
     @Id
     @GeneratedValue(generator = "ID_GENERATOR")
@@ -14,13 +13,13 @@ public class Category {
 
     protected String name;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "product")
     protected Set<CategorizedProduct> categorizedProducts = new HashSet<CategorizedProduct>();
 
-    public Category() {
+    public Product() {
     }
 
-    public Category(String name) {
+    public Product(String name) {
         this.name = name;
     }
 
